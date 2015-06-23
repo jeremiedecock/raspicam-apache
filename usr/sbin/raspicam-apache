@@ -1,0 +1,178 @@
+#!/bin/sh
+
+################################################################################
+# RASPICAM-APACHE SCRIPT
+#
+# Copyright (c) 2014,2015 Jérémie DECOCK <jd.jdhp@gmail.com> (www.jdhp.org)
+# 
+# The MIT license
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+################################################################################
+
+# TODO ################################
+
+# --ISO, -ISO
+# Set capture ISO
+# Sets the ISO to be used for captures. Range is 100 to 800.
+#
+# --ev, -ev
+# Set EV compensation
+# Set the EV compensation of the image. Range is -10 to +10, default is 0.
+#
+# --sharpness, -sh
+# Set image sharpness (-100 to 100)
+# Set the sharpness of the image, 0 is the default.
+# 
+# --contrast, -co
+# Set image contrast (-100 to 100)
+# Set the contrast of the image, 0 is the default
+# 
+# --brightness, -br
+# Set image brightness (0 to 100)
+# Set the brightness of the image, 50 is the default. 0 is black, 100 is white.
+# 
+# --saturation, -sa
+# Set image saturation (-100 to 100)
+# Set the colour saturation of the image. 0 is the default.
+# 
+# --exposure, -ex
+# Possible options are:
+# off
+# auto          Use automatic exposure mode
+# night         Select setting for night shooting
+# nightpreview  
+# backlight     Select setting for back-lit subject
+# spotlight     
+# sports        Select setting for sports (fast shutter etc.)
+# snow          Select setting optimized for snowy scenery
+# beach         Select setting optimized for beach
+# verylong      Select setting for long exposures
+# fixedfps      Constrain fps to a fixed value
+# antishake     Antishake mode
+# fireworks     Select setting optimized for fireworks
+# 
+# Note that not all of these settings may be implemented,
+# depending on camera tuning.
+# --awb, -awb
+# Set automatic white balance (AWB)
+# off           Turn off white balance calculation
+# auto          Automatic mode (default)
+# sun           Sunny mode
+# cloud shade   Cloudy mode
+# tungsten      Tungsten lighting mode
+# fluorescent   Fluorescent lighting mode
+# incandescent  Incandescent lighting mode
+# flash         Flash mode
+# horizon       Horizon mode
+# 
+# --metering, -mm
+# Specify the metering mode used for the preview and capture.
+# average Average the whole frame for metering
+# spot Spot metering
+# backlit Assume a backlit image
+# matrix Matrix metering
+# 
+# --imxfx, -ifx
+# Set image effect
+# none               No effect
+# negative           Produces a negative image
+# solarise           Solarise the image
+# whiteboard         Whiteboard effect
+# blackboard         Blackboard effect
+# sketch             Sketch-style effect
+# denoise            Denoise the image
+# emboss             Embossed effect
+# oilpaint           Oil paint-style effect
+# hatch              Cross-hatch sketch style
+# gpen               Graphite sketch style
+# pastel             Pastel effect
+# watercolour        Watercolour effect
+# film               Grainy film effect
+# blur               Blur the image
+# saturation         Colour-saturate the image
+# colourswap         Not fully implemented
+# washedout          Not fully implemented
+# posterise          Not fully implemented
+# colourpoint        Not fully implemented
+# colourbalance      Not fully implemented
+# cartoon            Not fully implemented
+# 
+# --colfx, -cfx
+# Set colour effect <U:V>
+# The supplied U and V parameters (range 0 to 255) are applied to
+# the U and Y channels of the image. For example, --colfx 128:128
+# should result in a monochrome image.
+# 
+# --rotation, -rot
+# Set image rotation (0-359)
+# Sets the rotation of the image in viewfinder and resulting image.
+# This can take any value from 0 upwards, but due to hardware
+# constraints only 0, 90, 180 and 270-degree rotations are
+# supported.
+# 
+# --hflip, -hf
+# Set horizontal flip
+# Flips the preview and saved image horizontally.
+# 
+# --vflip, -vf
+# Set vertical flip
+# Flips the preview and saved image vertically.
+# 
+# --roi, -roi
+# Set sensor region of interest
+# Allows the specification of the area of the sensor to be used as
+# the source for the preview and capture. This is defined as x,y for
+# the top left corner, and a width and height, all values in
+# normalised coordinates (0.0-1.0). So to set a ROI at half way
+# across and down the sensor, and an width and height of a
+# quarter of the sensor use :
+# -roi 0.5,0.5,0.25,0.25
+
+#######################################
+
+# Raspicam native resolution: 2592x1944
+#   ratio 1:2 -> 1296x972
+#   ratio 1:4 -> 648x486
+RASPICAM_WIDTH=648
+RASPICAM_HEIGHT=486
+
+# Quality: 0 to 100 (100=best)
+RASPICAM_QUALITY=75
+
+# Timeout (in ms)
+RASPICAM_TIMEOUT=1000
+
+# Output file (in /run to reduce sdcard damage and speedup read/write as /run is a tmpfs).
+# RASPICAM_OUTPUT_TMP is used to avoid picture fluttering.
+RASPICAM_OUTPUT=/run/raspicam.jpeg
+RASPICAM_OUTPUT_TMP=/run/raspicam.tmp.jpeg
+
+# Flip
+#RASPICAM_FLIP=--vflip
+RASPICAM_FLIP=
+
+while true
+do
+    raspistill --nopreview --width ${RASPICAM_WIDTH} --height ${RASPICAM_HEIGHT} --quality ${RASPICAM_QUALITY} --timeout ${RASPICAM_TIMEOUT} ${RASPICAM_FLIP} --output ${RASPICAM_OUTPUT_TMP}
+
+    # Double buffer like to avoid picture fluttering
+    mv ${RASPICAM_OUTPUT_TMP} ${RASPICAM_OUTPUT}
+done
+
