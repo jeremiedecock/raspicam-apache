@@ -6,8 +6,8 @@ Copyright (c) 2014,2015 Jeremie DECOCK (http://www.jdhp.org)
 
 TODO...
 
-![Photo 1](http://download.tuxfamily.org/jdhp/image/raspicam-apache-1.jpeg.jpeg)
-![Photo 2](http://download.tuxfamily.org/jdhp/image/raspicam-apache-2.jpeg.jpeg)
+![Photo 1](http://download.tuxfamily.org/jdhp/image/raspicam-apache-1.jpeg)
+![Photo 2](http://download.tuxfamily.org/jdhp/image/raspicam-apache-2.jpeg)
 
 ## Install
 
