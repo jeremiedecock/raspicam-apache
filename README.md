@@ -2,6 +2,13 @@
 
 Copyright (c) 2014,2015 Jeremie DECOCK (http://www.jdhp.org)
 
+## Description
+
+TODO...
+
+![Photo 1](http://download.tuxfamily.org/jdhp/image/raspicam-apache-1.jpeg.jpeg)
+![Photo 2](http://download.tuxfamily.org/jdhp/image/raspicam-apache-2.jpeg.jpeg)
+
 ## Install
 
 Run the `install_and_configure_raspicam_apache.sh` script as root.
