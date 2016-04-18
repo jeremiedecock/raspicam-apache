@@ -23,6 +23,10 @@ invoke-rc.d raspicam-apache stop
 invoke-rc.d raspicam-apache restart
 ```
 
+## CAD files
+
+https://github.com/jdhp-misc/cad-raspicam-pibow-mod-b
+
 ## License
 
 Raspicam-apache is distributed under the [MIT License](http://opensource.org/licenses/MIT).
